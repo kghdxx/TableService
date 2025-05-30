@@ -2,11 +2,20 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_FILE = 'Tableservice/File Upload Service/data-lakehouse2.yml'
-        APP_DIR = 'Tableservice/File Upload Service/app'
+        // Updated paths to match actual directory structure
+        DOCKER_COMPOSE_FILE = 'TableService/Tableservice/File Upload Service/data-lakehouse2.yml'
+        APP_DIR = 'TableService/Tableservice/File Upload Service/app'
     }
 
     stages {
+
+        stage('Clone Repo') {
+            steps {
+                // Clean up any existing repo to prevent re-clone issues
+                sh 'rm -rf TableService'
+                sh 'git clone https://github.com/kghdxx/TableService.git'
+            }
+        }
 
         stage('Build') {
             steps {

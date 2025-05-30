@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Updated paths to match actual directory structure
+        REPO_NAME = 'TableService'
+        REPO_URL = 'https://github.com/kghdxx/TableService.git'
         DOCKER_COMPOSE_FILE = 'TableService/Tableservice/File Upload Service/data-lakehouse2.yml'
         APP_DIR = 'TableService/Tableservice/File Upload Service/app'
     }
@@ -11,9 +12,8 @@ pipeline {
 
         stage('Clone Repo') {
             steps {
-                // Clean up any existing repo to prevent re-clone issues
-                sh 'rm -rf TableService'
-                sh 'git clone https://github.com/kghdxx/TableService.git'
+                sh "rm -rf ${REPO_NAME}"
+                sh "git clone ${REPO_URL}"
             }
         }
 
@@ -27,8 +27,11 @@ pipeline {
             steps {
                 dir("${APP_DIR}") {
                     sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
                     pip install pylint
-                    pylint streamlitdw_fe.py || true
+                    venv/bin/pylint streamlitdw_fe.py || true
                     '''
                 }
             }
@@ -38,8 +41,11 @@ pipeline {
             steps {
                 dir("${APP_DIR}") {
                     sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
                     pip install bandit
-                    bandit -r . || true
+                    venv/bin/bandit -r . || true
                     '''
                 }
             }
@@ -49,6 +55,15 @@ pipeline {
             steps {
                 sh "docker-compose -f '${DOCKER_COMPOSE_FILE}' up -d"
             }
+        }
+    }
+
+    post {
+        failure {
+            echo " Pipeline failed."
+        }
+        success {
+            echo " Pipeline completed successfully."
         }
     }
 }

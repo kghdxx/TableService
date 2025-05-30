@@ -45,12 +45,12 @@ def upload_to_minio(file, filename):
         minio_client.put_object(
             bucket_name, filename, file_stream, len(data)
         )
-        st.success(f"File {filename} uploaded successfully to Data Warehouse.")
+        st.success(f"File {filename} uploaded successfully to Warehouse.")
     except S3Error as e:
-        st.error(f"Failed to upload {filename} to Data Warehouse: {e}")
+        st.error(f"Failed to upload {filename} to Warehouse: {e}")
 
 def main():
-    st.title("File Upload to Redback Data Warehouse Server")
+    st.title("File Upload to Table Service Warehouse Server")
 
     # Project selection dropdown
     project = st.selectbox("Select Project", options=["project1", "project2", "project3", "project4", "project5", "other"])
@@ -69,7 +69,7 @@ def main():
             st.write(f"**File type:** {uploaded_file.type}")
             st.write(f"**File size:** {uploaded_file.size / (1024 * 1024):.2f} MB")
 
-            if st.button("Upload to Data Warehouse"):
+            if st.button("Upload to Warehouse"):
                 upload_to_minio(uploaded_file, custom_filename)
         else:
             st.warning("Please enter a valid base name. Only alphanumeric characters are allowed.")

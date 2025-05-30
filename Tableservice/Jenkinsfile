@@ -8,12 +8,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/kghdxx/TableService.git'
-            }
-        }
-
         stage('Build') {
             steps {
                 sh "docker-compose -f '${DOCKER_COMPOSE_FILE}' build"

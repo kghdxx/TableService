@@ -15,7 +15,7 @@ secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 
 # Set up MinIO client using the loaded environment variables
 minio_client = Minio(
-    "10.137.0.149:9000",  # MinIO server address
+    "minioserver:9000",  # MinIO server address
     access_key=access_key,  
     secret_key=secret_key,  
     secure=False  
@@ -50,7 +50,7 @@ def upload_to_minio(file, filename):
         st.error(f"Failed to upload {filename} to Warehouse: {e}")
 
 def main():
-    st.title("File Upload to Table Service Warehouse Server")
+    st.title("TableService")
 
     # Project selection dropdown
     project = st.selectbox("Select Project", options=["project1", "project2", "project3", "project4", "project5", "other"])

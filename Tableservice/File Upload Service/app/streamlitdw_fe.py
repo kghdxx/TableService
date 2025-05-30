@@ -15,7 +15,7 @@ secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 
 # Set up MinIO client using the loaded environment variables
 minio_client = Minio(
-    "minioserver:9000",  # MinIO server address
+    "localhost:9000",  # MinIO server address
     access_key=access_key,  
     secret_key=secret_key,  
     secure=False  

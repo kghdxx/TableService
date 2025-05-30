@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_COMPOSE_FILE = 'Tableservice/File Upload Service/data-lakehouse2.yml'
+        APP_DIR = 'Tableservice/File Upload Service/app'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/kghdxx/TableService.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh "docker-compose -f '${DOCKER_COMPOSE_FILE}' build"
+            }
+        }
+
+        stage('Lint (pylint)') {
+            steps {
+                dir("${APP_DIR}") {
+                    sh '''
+                    pip install pylint
+                    pylint streamlitdw_fe.py || true
+                    '''
+                }
+            }
+        }
+
+        stage('Security Scan (bandit)') {
+            steps {
+                dir("${APP_DIR}") {
+                    sh '''
+                    pip install bandit
+                    bandit -r . || true
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh "docker-compose -f '${DOCKER_COMPOSE_FILE}' up -d"
+            }
+        }
+    }
+}

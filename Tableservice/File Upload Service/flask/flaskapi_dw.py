@@ -8,7 +8,7 @@ import io
 app = Flask(__name__)
 
 # minio details
-MINIO_URL = "10.137.0.149:9000"
+MINIO_URL = "localhost:9000"
 ACCESS_KEY = os.getenv('AWS_ACCESS_KEY_ID') 
 SECRET_KEY = os.getenv('AWS_SECRET_ACCESS_KEY') 
 BUCKET_NAME = "file-upload-service-sl"

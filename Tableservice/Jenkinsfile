@@ -6,6 +6,8 @@ pipeline {
         APP_DIR = 'Tableservice/File Upload Service/app'
     }
 
+    stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/kghdxx/TableService.git'
